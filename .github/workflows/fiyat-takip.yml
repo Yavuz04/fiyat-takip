@@ -1,0 +1,99 @@
+# Fiyat takip botu — 25 dakikada bir çalışır, durum değiştiyse repoya commit'ler.
+#
+# Zamanlama notları:
+#  - Cron UTC'dir ama "her saatin 0, 25, 50. dakikası" saat diliminden bağımsızdır.
+#    Aralıklar 25-25-10 dk olur (cron ile tam 25 dk mümkün değil). Mesajlardaki saatler Türkiye saatidir.
+#  - GitHub zamanlanmış işleri yoğunlukta 5-30 dk geciktirebilir ya da atlayabilir.
+#  - Public repoda 60 gün aktivite olmazsa zamanlanmış workflow kapanır; aşağıdaki "keepalive"
+#    adımı ve bot commit'leri buna karşı önlemdir.
+
+name: Fiyat takip
+
+on:
+  schedule:
+    - cron: "0,25,50 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry-run (bildirim gönderme, dosya yazma)"
+        type: boolean
+        default: false
+      site:
+        description: "Sadece bu site (boş = hepsi), ör. trendyol"
+        type: string
+        default: ""
+
+permissions:
+  contents: write   # durum dosyalarını commit'lemek için
+  actions: write    # keepalive: workflow'u yeniden etkinleştirme API çağrısı için
+
+# Aynı anda iki çalışma olmasın (state dosyaları çakışmasın); yenisi öncekini beklesin
+concurrency:
+  group: fiyat-takip
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Bağımlılıklar
+        run: pip install -r requirements.txt
+
+      - name: Botu çalıştır
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          args=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then args="$args --dry-run"; fi
+          if [ -n "${{ inputs.site }}" ]; then args="$args --site ${{ inputs.site }}"; fi
+          python -m fiyatbot $args
+
+      # Bir site beklenmeyen sayfa döndürdüyse (yapı değişti / engel) teşhis için 7 gün saklanır
+      - name: Teşhis dosyaları
+        if: always() && hashFiles('debug/**') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-${{ github.run_id }}
+          path: debug/
+          retention-days: 7
+
+      # Bot hata verse bile kaydedilmiş durum (ör. işlenen komutlar / Telegram offset'i) kaybolmasın
+      - name: Durumu commit'le (değişiklik varsa)
+        if: always() && inputs.dry_run != true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "Durum değişmedi, commit yok."
+            exit 0
+          fi
+          git commit -m "durum: $(TZ=Europe/Istanbul date '+%Y-%m-%d %H:%M')"
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "Push başarısız, tekrar deneniyor ($i)..."; sleep $((i * 5))
+          done
+          exit 1
+
+      # 60 gün kuralı: workflow'u (zaten açıkken) yeniden etkinleştirmek etkinlik sayacını sıfırlar.
+      # Günde bir kez yapmak yeterli (TR 04:00-04:24 arasındaki çalışma).
+      - name: Keepalive
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(TZ=Europe/Istanbul date +%H)" = "04" ] && [ "$(date +%M)" -lt 25 ]; then
+            gh api -X PUT "repos/${{ github.repository }}/actions/workflows/fiyat-takip.yml/enable" \
+              && echo "Keepalive gönderildi."
+          fi

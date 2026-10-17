@@ -1,0 +1,81 @@
+[
+  {
+    "id": 1,
+    "sorgu": "Huawei M-Pencil 3",
+    "max_fiyat": 3000,
+    "min_fiyat": 1500,
+    "gerekli": [
+      "huawei",
+      "m pencil",
+      "3 nesil"
+    ],
+    "haric": [
+      "kılıf",
+      "uç",
+      "ucu",
+      "yedek",
+      "uyumlu",
+      "muadil",
+      "matepad",
+      "klavye",
+      "yenilenmiş",
+      "ikinci el",
+      "2 el",
+      "teşhir",
+      "vitrin",
+      "outlet",
+      "kalem ucu"
+    ],
+    "aktif": true,
+    "siteler": null,
+    "garanti": "hepsi"
+  },
+  {
+    "id": 2,
+    "sorgu": "Huawei MatePad 11.5 S",
+    "max_fiyat": 15000.0,
+    "min_fiyat": 6000,
+    "gerekli": [
+      "huawei",
+      "matepad 11",
+      "5",
+      "s"
+    ],
+    "haric": [
+      "kılıf",
+      "kapak",
+      "cam",
+      "koruyucu",
+      "ekran koruyucu",
+      "yenilenmiş",
+      "ikinci el",
+      "2 el",
+      "teşhir",
+      "vitrin",
+      "outlet",
+      "kutusuz",
+      "aksesuar",
+      "şarj aleti",
+      "şarj cihazı",
+      "kablo",
+      "adaptör",
+      "tutucu",
+      "sticker",
+      "yedek parça",
+      "kordon",
+      "kayış",
+      "silikon",
+      "pro",
+      "plus",
+      "max",
+      "mini",
+      "ultra",
+      "lite",
+      "air",
+      "fe"
+    ],
+    "aktif": true,
+    "siteler": null,
+    "garanti": "hepsi"
+  }
+]

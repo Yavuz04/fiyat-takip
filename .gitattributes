@@ -1,0 +1,2 @@
+# Tüm metin dosyaları repoda LF satır sonuyla tutulur (Actions Linux'ta çalışır)
+* text=auto eol=lf

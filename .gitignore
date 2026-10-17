@@ -1,0 +1,11 @@
+# Gizli bilgiler / secrets — ASLA commit'leme
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Yerel hata ayıklama çıktıları
+debug/
