@@ -28,58 +28,56 @@
   },
   "saglik": {
     "akakce": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "engel",
+      "son_hata": "www.akakce.com: bot engeli (HTTP #)"
     },
     "amazon": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "hata",
+      "son_hata": "FetchError: www.amazon.com.tr: HTTP #"
     },
     "cimri": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "engel",
+      "son_hata": "www.cimri.com: bot engeli (HTTP #)"
     },
     "epey": {
-      "ardisik_hata": 5,
+      "ardisik_hata": 6,
       "uyarildi": true,
-      "son_durum": "hata",
-      "son_hata": "FetchError: www.epey.com: ağ hatası: Failed to perform, curl: (28) Operation timed out after 20009 milliseconds with 0 bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
+      "son_durum": "engel",
+      "son_hata": "www.epey.com: bot engeli (HTTP #)"
     },
     "hepsiburada": {
       "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "ok"
     },
     "n11": {
       "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "ok"
     },
     "pazarama": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "engel",
+      "son_hata": "www.pazarama.com: bot engeli (HTTP #)"
     },
     "pttavm": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "engel",
+      "son_hata": "www.pttavm.com: bot engeli (HTTP #)"
     },
     "trendyol": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "son_basari": "2026-10-18T01:38:20+03:00"
+      "son_durum": "engel",
+      "son_hata": "www.trendyol.com: bot engeli (HTTP #)"
     }
   },
   "telegram_offset": 982833544
