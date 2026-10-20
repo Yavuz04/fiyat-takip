@@ -9,12 +9,13 @@
         "fiyat": 2899.0,
         "zaman": "2026-10-18T00:06:51+03:00"
       }
-    }
+    },
+    "2": {}
   },
   "son_fiyat": {
     "1|akakce": 2899.0,
     "1|cimri": 3199.0,
-    "1|pazarama": 3599.1,
+    "1|pazarama": 3499.0,
     "1|pttavm": 4299.0,
     "1|trendyol": 2899.0,
     "2|akakce": 19199.04,
@@ -23,40 +24,35 @@
   },
   "saglik": {
     "akakce": {
-      "ardisik_hata": 1,
+      "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "engel",
-      "son_hata": "www.akakce.com: bot engeli (HTTP #)"
+      "son_durum": "ok"
     },
     "cimri": {
-      "ardisik_hata": 1,
+      "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "engel",
-      "son_hata": "www.cimri.com: bot engeli (HTTP #)"
+      "son_durum": "ok"
     },
     "epey": {
-      "ardisik_hata": 6,
+      "ardisik_hata": 7,
       "uyarildi": true,
-      "son_durum": "engel",
-      "son_hata": "www.epey.com: bot engeli (HTTP #)"
+      "son_durum": "hata",
+      "son_hata": "FetchError: www.epey.com: ağ hatası: Failed to perform, curl: (#) Operation timed out after # milliseconds with # bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more detai"
     },
     "pazarama": {
-      "ardisik_hata": 1,
+      "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "engel",
-      "son_hata": "www.pazarama.com: bot engeli (HTTP #)"
+      "son_durum": "ok"
     },
     "pttavm": {
-      "ardisik_hata": 1,
+      "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "engel",
-      "son_hata": "www.pttavm.com: bot engeli (HTTP #)"
+      "son_durum": "ok"
     },
     "trendyol": {
-      "ardisik_hata": 1,
+      "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "engel",
-      "son_hata": "www.trendyol.com: bot engeli (HTTP #)"
+      "son_durum": "ok"
     }
   },
   "telegram_offset": null
