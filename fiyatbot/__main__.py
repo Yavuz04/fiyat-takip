@@ -5,6 +5,7 @@
   python -m fiyatbot --dry-run --site trendyol    # tek site
   python -m fiyatbot --dry-run --urun 1 -v        # tek ürün, ayrıntılı log
   python -m fiyatbot                              # gerçek çalışma: komutlar + tarama + bildirim + durum kaydı
+  python -m fiyatbot --profil ev                  # PC görevi: sadece GitHub'ı engelleyen siteler
   python -m fiyatbot --chat-id-bul                # bota yazdıktan sonra chat_id'ni gösterir
   python -m fiyatbot --telegram-test              # .env ayarlarıyla deneme mesajı gönderir
 """
@@ -38,8 +39,10 @@ def find_chat_id() -> int:
 
 
 def run(args) -> int:
+    profil = args.profil or ("bulut" if config.IS_CI else "hepsi")
+    config.use_profile(profil)
     options = RunOptions(dry_run=args.dry_run, sites=args.site, urun_ids=args.urun,
-                         enrich=not args.no_enrich, commands=not args.no_commands)
+                         enrich=not args.no_enrich, commands=not args.no_commands, profil=profil)
     telegram = None
     if config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHAT_ID:
         telegram = Telegram(config.TELEGRAM_BOT_TOKEN, config.TELEGRAM_CHAT_ID)
@@ -57,6 +60,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--urun", type=int, action="append", help="sadece bu ürün id(leri)")
     parser.add_argument("--no-enrich", action="store_true", help="detay sayfalarını açma")
     parser.add_argument("--no-commands", action="store_true", help="Telegram komutlarını işleme")
+    parser.add_argument("--profil", choices=config.PROFILES,
+                        help="bulut: GitHub'da çalışan siteler (Actions'ta varsayılan); "
+                             "ev: GitHub'ı engelleyen siteler, ayrı durum dosyası, komut yok (PC görevi); "
+                             "hepsi: tüm siteler (yerelde varsayılan)")
     parser.add_argument("--chat-id-bul", action="store_true", help="bota gelen mesajlardan chat_id'yi göster")
     parser.add_argument("--telegram-test", action="store_true", help="deneme mesajı gönder")
     parser.add_argument("-v", "--verbose", action="store_true")

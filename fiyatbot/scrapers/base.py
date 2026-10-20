@@ -19,7 +19,8 @@ class ParseError(Exception):
 class Scraper(ABC):
     name: str = ""            # kısa kimlik, ör. "trendyol" (watchlist'teki site kısıtında kullanılır)
     label: str = ""           # mesajlarda görünen ad, ör. "Trendyol"
-    enabled_on_ci: bool = True  # GitHub Actions'ta engelleniyorsa False
+    # False → GitHub Actions IP'lerini engelliyor; sadece "ev" profilinde (PC'de) taranır
+    enabled_on_ci: bool = True
 
     def __init__(self, http: HttpClient):
         self.http = http

@@ -37,9 +37,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -57,12 +57,12 @@ jobs:
           args=""
           if [ "${{ inputs.dry_run }}" = "true" ]; then args="$args --dry-run"; fi
           if [ -n "${{ inputs.site }}" ]; then args="$args --site ${{ inputs.site }}"; fi
-          python -m fiyatbot $args
+          python -m fiyatbot --profil bulut $args
 
       # Bir site beklenmeyen sayfa döndürdüyse (yapı değişti / engel) teşhis için 7 gün saklanır
       - name: Teşhis dosyaları
         if: always() && hashFiles('debug/**') != ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: debug-${{ github.run_id }}
           path: debug/

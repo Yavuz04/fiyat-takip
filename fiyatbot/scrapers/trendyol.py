@@ -105,6 +105,7 @@ def parse_detail(html: str, teklif: Teklif) -> Teklif:
 class Trendyol(Scraper):
     name = "trendyol"
     label = "Trendyol"
+    enabled_on_ci = False  # Actions IP'lerinde arama sayfası Cloudflare challenge (2026-10 erişim testi)
 
     def search(self, query: str) -> list[Teklif]:
         resp = self.http.get(f"{BASE}/sr?q={quote(query)}")

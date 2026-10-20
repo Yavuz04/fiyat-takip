@@ -1,0 +1,63 @@
+{
+  "bildirimler": {
+    "1": {
+      "akakce|https://www.akakce.com/dokunmatik-kalem/en-ucuz-huawei-m-pencil-3-nesil-tablet-kalemi-fiyati,692026490.html": {
+        "fiyat": 2899.0,
+        "zaman": "2026-10-18T00:06:51+03:00"
+      },
+      "trendyol|https://www.trendyol.com/huawei/m-pencil-3-nesil-tablet-kalemi-p-835682718?boutiqueId=689770&merchantId=968": {
+        "fiyat": 2899.0,
+        "zaman": "2026-10-18T00:06:51+03:00"
+      }
+    }
+  },
+  "son_fiyat": {
+    "1|akakce": 2899.0,
+    "1|cimri": 3199.0,
+    "1|pazarama": 3599.1,
+    "1|pttavm": 4299.0,
+    "1|trendyol": 2899.0,
+    "2|akakce": 19199.04,
+    "2|cimri": 19199.04,
+    "2|pttavm": 19199.04
+  },
+  "saglik": {
+    "akakce": {
+      "ardisik_hata": 1,
+      "uyarildi": false,
+      "son_durum": "engel",
+      "son_hata": "www.akakce.com: bot engeli (HTTP #)"
+    },
+    "cimri": {
+      "ardisik_hata": 1,
+      "uyarildi": false,
+      "son_durum": "engel",
+      "son_hata": "www.cimri.com: bot engeli (HTTP #)"
+    },
+    "epey": {
+      "ardisik_hata": 6,
+      "uyarildi": true,
+      "son_durum": "engel",
+      "son_hata": "www.epey.com: bot engeli (HTTP #)"
+    },
+    "pazarama": {
+      "ardisik_hata": 1,
+      "uyarildi": false,
+      "son_durum": "engel",
+      "son_hata": "www.pazarama.com: bot engeli (HTTP #)"
+    },
+    "pttavm": {
+      "ardisik_hata": 1,
+      "uyarildi": false,
+      "son_durum": "engel",
+      "son_hata": "www.pttavm.com: bot engeli (HTTP #)"
+    },
+    "trendyol": {
+      "ardisik_hata": 1,
+      "uyarildi": false,
+      "son_durum": "engel",
+      "son_hata": "www.trendyol.com: bot engeli (HTTP #)"
+    }
+  },
+  "telegram_offset": null
+}

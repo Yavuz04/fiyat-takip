@@ -42,6 +42,13 @@ def read(path: Path | None = None) -> list[dict]:
         return list(csv.DictReader(f))
 
 
+def read_all() -> list[dict]:
+    """GitHub (bulut) ve PC (ev) profillerinin geçmişini zaman sırasıyla birleştirir."""
+    paths = dict.fromkeys([config.HISTORY_FILE, config.EV_HISTORY_FILE])
+    rows = [r for p in paths for r in read(p)]
+    return sorted(rows, key=lambda r: r["zaman"])
+
+
 def append(rows: list[dict], now: datetime, path: Path | None = None) -> None:
     """Yeni satırları ekler ve eski satırları budar. Yeni satır yoksa dosyaya dokunmaz."""
     if not rows:

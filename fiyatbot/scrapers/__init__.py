@@ -26,13 +26,17 @@ def scraper_classes() -> dict[str, type[Scraper]]:
     return {cls.name: cls for cls in Scraper.__subclasses__() if cls.name}
 
 
-def build_scrapers(http: HttpClient, only: list[str] | None = None, ci: bool = False) -> list[Scraper]:
+def build_scrapers(http: HttpClient, only: list[str] | None = None, profile: str = "hepsi") -> list[Scraper]:
+    """profile: "bulut" → GitHub'da çalışan siteler, "ev" → GitHub'ı engelleyen siteler, "hepsi" → tümü.
+    `only` verilirse profil yok sayılır (elle tek site denemek için)."""
     result = []
     for name, cls in sorted(scraper_classes().items()):
-        if only and name not in only:
+        if only:
+            if name not in only:
+                continue
+        elif profile == "bulut" and not cls.enabled_on_ci:
             continue
-        if ci and not cls.enabled_on_ci and not only:
-            log.info("%s: Actions'ta devre dışı (enabled_on_ci=False)", name)
+        elif profile == "ev" and cls.enabled_on_ci:
             continue
         result.append(cls(http))
     return result

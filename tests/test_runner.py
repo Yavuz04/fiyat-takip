@@ -94,6 +94,29 @@ def test_site_failure_isolated_and_health_alert(env, monkeypatch):
     assert load_state().saglik["bad"]["uyarildi"] is False
 
 
+def test_profiles_split_sites():
+    from fiyatbot.scrapers import build_scrapers
+    names = lambda p: [s.name for s in build_scrapers(None, profile=p)]  # noqa: E731
+    assert names("bulut") == ["amazon", "hepsiburada", "n11"]
+    assert names("ev") == ["akakce", "cimri", "epey", "pazarama", "pttavm", "trendyol"]
+    assert len(names("hepsi")) == 9
+    assert [s.name for s in build_scrapers(None, only=["trendyol"], profile="bulut")] == ["trendyol"]
+
+
+def test_ev_profile_skips_commands_and_uses_own_files(env, monkeypatch):
+    from tests.test_commands import FakeTelegram, msg
+    monkeypatch.setattr(config, "TELEGRAM_CHAT_ID", "111")
+    monkeypatch.setattr(runner, "build_scrapers", lambda *a, **kw: [FakeShop("shop", [[2899]])])
+    config.use_profile("ev")  # conftest'in geçici EV yollarını etkinleştirir
+    tg = FakeTelegram([msg(1, "/sil 1", chat_id=111)])
+    notifier = FakeNotifier()
+    runner.run(runner.RunOptions(enrich=False, profil="ev"), notifier, telegram=tg)
+    assert tg.calls == []                       # PC komutlara dokunmaz (GitHub'ın işi)
+    assert len(notifier.sent) == 1              # ama fırsatı bildirir
+    assert config.STATE_FILE == config.EV_STATE_FILE and config.EV_STATE_FILE.exists()
+    assert not (env / "state.json").exists()
+
+
 def test_unchanged_state_not_rewritten(env, monkeypatch):
     # Aynı sonuç → state.json'a hiç dokunulmamalı (Actions'ta boş/anlamsız commit oluşmasın)
     shop = FakeShop("shop", [[2899], [2899]])

@@ -60,6 +60,7 @@ def parse_search(html: str) -> list[Teklif]:
 class Cimri(Scraper):
     name = "cimri"
     label = "Cimri"
+    enabled_on_ci = False  # Actions IP'leri tüm sitede Cloudflare 403 (2026-10 erişim testi)
 
     def __init__(self, http):
         super().__init__(http)

@@ -56,6 +56,7 @@ def parse_search(html: str) -> list[Teklif]:
 class Akakce(Scraper):
     name = "akakce"
     label = "Akakçe"
+    enabled_on_ci = False  # Actions IP'leri tüm sitede Cloudflare 403 (2026-10 erişim testi)
 
     def search(self, query: str) -> list[Teklif]:
         return parse_search(self.http.get(f"{BASE}/arama/?q={quote_plus(query)}").text)

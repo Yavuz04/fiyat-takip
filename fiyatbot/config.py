@@ -14,6 +14,19 @@ WATCHLIST_FILE = DATA_DIR / "watchlist.json"
 STATE_FILE = DATA_DIR / "state.json"
 HISTORY_FILE = DATA_DIR / "price_history.csv"
 
+# "ev" profili (PC'de, GitHub IP'lerini engelleyen siteler) ayrı dosyalara yazar: GitHub ile PC aynı
+# anda push etse bile git çakışması olmaz. Komutları sadece "bulut" profili işler.
+EV_STATE_FILE = DATA_DIR / "state-ev.json"
+EV_HISTORY_FILE = DATA_DIR / "price_history-ev.csv"
+PROFILES = ("hepsi", "bulut", "ev")
+
+
+def use_profile(profile: str) -> None:
+    """Profilin durum/geçmiş dosyalarını etkinleştirir."""
+    global STATE_FILE, HISTORY_FILE
+    if profile == "ev":
+        STATE_FILE, HISTORY_FILE = EV_STATE_FILE, EV_HISTORY_FILE
+
 load_dotenv(ROOT / ".env")  # yerelde .env; Actions'ta Secrets ortam değişkeni olarak gelir
 
 TZ = ZoneInfo("Europe/Istanbul")

@@ -37,6 +37,7 @@ class RunOptions:
     urun_ids: list[int] | None = None
     enrich: bool = True
     commands: bool = True
+    profil: str = "hepsi"  # "bulut" (GitHub), "ev" (PC), "hepsi" (yerel deneme)
 
 
 @dataclass
@@ -97,7 +98,9 @@ def handle_commands(telegram: Telegram, run: _Run, kayitlar: list[TakipKaydi], d
     except TelegramError as e:
         log.warning("Telegram komutları alınamadı: %s", e)
         return None
-    cmds = Commands(kayitlar, state.son_fiyat, preview=run.preview)
+    # /liste'de PC'nin (ev profili) gördüğü fiyatlar da görünsün
+    son_fiyat = {**load_state(config.EV_STATE_FILE).son_fiyat, **state.son_fiyat}
+    cmds = Commands(kayitlar, son_fiyat, preview=run.preview)
     allowed = str(config.TELEGRAM_CHAT_ID).strip()
     for update in updates:
         state.telegram_offset = update["update_id"] + 1
@@ -126,12 +129,14 @@ def handle_commands(telegram: Telegram, run: _Run, kayitlar: list[TakipKaydi], d
 def run(options: RunOptions, notifier, telegram: Telegram | None = None, state: State | None = None) -> State:
     now = now_tr()
     state = state if state is not None else load_state()
-    scrapers = build_scrapers(HttpClient(), only=options.sites, ci=config.IS_CI)
+    scrapers = build_scrapers(HttpClient(), only=options.sites, profile=options.profil)
     ctx = _Run(state, scrapers, notifier, now.isoformat(timespec="seconds"), options.enrich)
     kayitlar = load_watchlist()
+    log.info("Profil: %s", options.profil)
 
     previewed: set[int] = set()
-    if telegram and options.commands:
+    # Komutları sadece tek bir taraf okumalı; aksi halde GitHub ile PC birbirinin mesajlarını "çalar"
+    if telegram and options.commands and options.profil != "ev":
         cmds = handle_commands(telegram, ctx, kayitlar, options.dry_run)
         if cmds:
             previewed = cmds.previewed

@@ -83,6 +83,7 @@ def parse_search(html: str) -> list[Teklif]:
 class Pazarama(Scraper):
     name = "pazarama"
     label = "Pazarama"
+    enabled_on_ci = False  # Actions IP'leri tüm sitede Cloudflare 403 (2026-10 erişim testi)
 
     def search(self, query: str) -> list[Teklif]:
         return parse_search(self.http.get(f"{BASE}/arama?q={quote(query)}").text)

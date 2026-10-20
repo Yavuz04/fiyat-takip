@@ -7,5 +7,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Yerel hata ayıklama çıktıları
+# Yerel hata ayıklama çıktıları ve PC görevi logları
 debug/
+logs/

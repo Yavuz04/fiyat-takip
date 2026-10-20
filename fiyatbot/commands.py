@@ -282,7 +282,7 @@ class Commands:
     def cmd_gecmis(self, rest: str) -> str:
         self._need(rest.split(), 1, "/gecmis &lt;id&gt;")
         k = self._get(rest.split()[0])
-        rows = [r for r in history.read() if r["urun_id"] == str(k.id)]
+        rows = [r for r in history.read_all() if r["urun_id"] == str(k.id)]
         if not rows:
             return f"#{k.id} için henüz fiyat geçmişi yok."
         lowest = min(rows, key=lambda r: float(r["fiyat"]))
