@@ -30,12 +30,12 @@ STALE_LOCK_SECONDS = 30 * 60
 log = logging.getLogger("ev-gorevi")
 
 
-def git(*args: str, check: bool = True) -> subprocess.CompletedProcess:
+def git(*args: str, check: bool = True, quiet: bool = False) -> subprocess.CompletedProcess:
     result = subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True, encoding="utf-8",
                             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     if result.stdout.strip():
         log.info("git %s: %s", args[0], result.stdout.strip()[-500:])
-    if result.returncode != 0:
+    if result.returncode != 0 and not quiet:
         log.warning("git %s başarısız: %s", " ".join(args), result.stderr.strip()[-500:])
         if check:
             raise RuntimeError(f"git {args[0]} başarısız")
@@ -50,11 +50,32 @@ def acquire_lock() -> bool:
     return True
 
 
+def ensure_requirements() -> None:
+    """Çekilen kodda requirements.txt değiştiyse paketleri günceller."""
+    req = REPO / "requirements.txt"
+    stamp = REPO / "logs" / "requirements.installed"
+    current = req.read_text(encoding="utf-8")
+    if stamp.exists() and stamp.read_text(encoding="utf-8") == current:
+        return
+    log.info("requirements.txt değişmiş, paketler güncelleniyor")
+    result = subprocess.run([str(_python()), "-m", "pip", "install", "-q", "-r", str(req)], cwd=REPO,
+                            capture_output=True, text=True, encoding="utf-8",
+                            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    if result.returncode == 0:
+        stamp.write_text(current, encoding="utf-8")
+    else:
+        log.warning("pip install başarısız: %s", result.stderr.strip()[-500:])
+
+
+def _python() -> Path:
+    # pythonw ile başlatılsa bile alt süreçler python.exe ile (konsolsuz) çalışır
+    exe = Path(sys.executable)
+    return exe.with_name("python.exe") if exe.name.lower() == "pythonw.exe" else exe
+
+
 def run_bot() -> int:
     env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUNBUFFERED": "1"}
-    # pythonw ile başlatılsa bile bot alt süreci python.exe ile (konsolsuz) çalışır
-    python = Path(sys.executable).with_name("python.exe") if sys.executable.endswith("pythonw.exe") else Path(sys.executable)
-    result = subprocess.run([str(python), "-m", "fiyatbot", "--profil", "ev"], cwd=REPO, env=env,
+    result = subprocess.run([str(_python()), "-m", "fiyatbot", "--profil", "ev"], cwd=REPO, env=env,
                             capture_output=True, text=True, encoding="utf-8", timeout=20 * 60,
                             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     for line in (result.stdout + result.stderr).splitlines():
@@ -64,7 +85,8 @@ def run_bot() -> int:
 
 def push_state() -> None:
     git("add", "--", *[f for f in EV_FILES if (REPO / f).exists()])
-    if git("diff", "--cached", "--quiet", check=False).returncode == 0:
+    # diff --quiet: 0 = değişiklik yok, 1 = değişiklik var (hata değil)
+    if git("diff", "--cached", "--quiet", check=False, quiet=True).returncode == 0:
         log.info("Durum değişmedi, commit yok.")
         return
     git("commit", "-m", f"ev durum: {datetime.now():%Y-%m-%d %H:%M}")
@@ -90,6 +112,7 @@ def main() -> int:
         log.info("===== PC görevi başladı =====")
         if git("pull", "--rebase", "--autostash", check=False).returncode != 0:
             log.warning("git pull yapılamadı (internet yok?); yerel kopya ile devam")
+        ensure_requirements()
         code = run_bot()
         log.info("Bot çıkış kodu: %d", code)
         push_state()

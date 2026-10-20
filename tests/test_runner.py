@@ -82,6 +82,8 @@ def test_dry_run_writes_nothing(env, monkeypatch):
 
 
 def test_site_failure_isolated_and_health_alert(env, monkeypatch):
+    # Bozuk siteler ~2 saatte bir denenir; test saati deneme penceresine sabitlenir
+    monkeypatch.setattr(runner, "now_tr", lambda: datetime.fromisoformat("2026-10-21T14:05:00+03:00"))
     good = FakeShop("good", [[2899]] * 4)
     bad = FakeShop("bad", [BlockedError("bad: bot engeli (HTTP 403)")] * 3 + [[2950]])
     sent = run_once(monkeypatch, [bad, good])
@@ -115,6 +117,21 @@ def test_ev_profile_skips_commands_and_uses_own_files(env, monkeypatch):
     assert len(notifier.sent) == 1              # ama fırsatı bildirir
     assert config.STATE_FILE == config.EV_STATE_FILE and config.EV_STATE_FILE.exists()
     assert not (env / "state.json").exists()
+
+
+def test_unhealthy_site_skipped_until_retry_window(env, monkeypatch):
+    from fiyatbot.http import FetchError
+    good = FakeShop("good", [[2899]] * 5)
+    bad = FakeShop("bad", [FetchError("timeout")] * 3 + [[2950]])
+    monkeypatch.setattr(runner, "now_tr", lambda: datetime.fromisoformat("2026-10-21T13:30:00+03:00"))
+    for _ in range(3):
+        run_once(monkeypatch, [bad, good])          # 3. hatada uyarı → bozuk işaretli
+    assert load_state().saglik["bad"]["uyarildi"] is True
+    run_once(monkeypatch, [bad, good])              # 13:30 → deneme penceresi dışı, atlanır
+    assert len(bad.prices) == 1                     # çağrılmadı
+    monkeypatch.setattr(runner, "now_tr", lambda: datetime.fromisoformat("2026-10-21T14:05:00+03:00"))
+    sent = run_once(monkeypatch, [bad, good])       # 14:05 → denenir, düzelmiş → "tekrar çalışıyor"
+    assert any("tekrar çalışıyor" in m for m in sent)
 
 
 def test_unchanged_state_not_rewritten(env, monkeypatch):

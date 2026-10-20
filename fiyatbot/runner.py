@@ -126,10 +126,23 @@ def handle_commands(telegram: Telegram, run: _Run, kayitlar: list[TakipKaydi], d
     return cmds
 
 
+def should_retry_unhealthy(now) -> bool:
+    """Uyarı verilmiş (bozuk) siteler her çalışmada değil, ~2 saatte bir denenir (çift saatlerin ilk
+    25 dakikası). Zamana bakılır, sayaç tutulmaz: durum dosyası her çalışmada değişip commit üretmesin."""
+    return now.hour % 2 == 0 and now.minute < 25
+
+
 def run(options: RunOptions, notifier, telegram: Telegram | None = None, state: State | None = None) -> State:
     now = now_tr()
     state = state if state is not None else load_state()
     scrapers = build_scrapers(HttpClient(), only=options.sites, profile=options.profil)
+    if not options.sites and not should_retry_unhealthy(now):
+        unhealthy = {site for site, s in state.saglik.items() if s.get("uyarildi")}
+        skipped = [s.name for s in scrapers if s.name in unhealthy]
+        if skipped:
+            log.info("Bozuk olarak işaretli siteler bu çalışmada atlandı (~2 saatte bir denenir): %s",
+                     ", ".join(skipped))
+            scrapers = [s for s in scrapers if s.name not in unhealthy]
     ctx = _Run(state, scrapers, notifier, now.isoformat(timespec="seconds"), options.enrich)
     kayitlar = load_watchlist()
     log.info("Profil: %s", options.profil)
