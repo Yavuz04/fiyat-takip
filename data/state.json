@@ -4,15 +4,15 @@
     "2": {}
   },
   "son_fiyat": {
-    "1|hepsiburada": 4100.0,
+    "1|hepsiburada": 4080.0,
     "1|n11": 3499.0,
     "2|hepsiburada": 22499.0,
     "2|n11": 22799.0
   },
   "saglik": {
     "amazon": {
-      "ardisik_hata": 2,
-      "uyarildi": false,
+      "ardisik_hata": 3,
+      "uyarildi": true,
       "son_durum": "hata",
       "son_hata": "FetchError: www.amazon.com.tr: HTTP #"
     },
@@ -22,9 +22,10 @@
       "son_durum": "ok"
     },
     "n11": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok"
+      "son_durum": "engel",
+      "son_hata": "www.n#.com: bot engeli (HTTP #)"
     }
   },
   "telegram_offset": 982833544
