@@ -11,7 +11,7 @@
   },
   "saglik": {
     "amazon": {
-      "ardisik_hata": 3,
+      "ardisik_hata": 4,
       "uyarildi": true,
       "son_durum": "hata",
       "son_hata": "FetchError: www.amazon.com.tr: HTTP #"
