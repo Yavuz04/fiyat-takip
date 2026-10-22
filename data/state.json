@@ -22,9 +22,10 @@
       "son_durum": "ok"
     },
     "n11": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok"
+      "son_durum": "engel",
+      "son_hata": "www.n#.com: bot engeli (HTTP #)"
     }
   },
   "telegram_offset": 982833544
