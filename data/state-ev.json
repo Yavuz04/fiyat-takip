@@ -29,13 +29,13 @@
       "son_durum": "ok"
     },
     "cimri": {
-      "ardisik_hata": 5,
+      "ardisik_hata": 6,
       "uyarildi": true,
       "son_durum": "engel",
       "son_hata": "www.cimri.com: bot engeli (HTTP #)"
     },
     "epey": {
-      "ardisik_hata": 9,
+      "ardisik_hata": 10,
       "uyarildi": true,
       "son_durum": "hata",
       "son_hata": "FetchError: www.epey.com: ağ hatası: Failed to perform, curl: (#) Operation timed out after # milliseconds with # bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more detai"
