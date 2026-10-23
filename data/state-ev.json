@@ -25,9 +25,10 @@
   },
   "saglik": {
     "akakce": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok"
+      "son_durum": "hata",
+      "son_hata": "FetchError: www.akakce.com: ağ hatası: Failed to perform, curl: (#) Could not resolve host: www.akakce.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
     },
     "cimri": {
       "ardisik_hata": 8,
@@ -42,19 +43,22 @@
       "son_hata": "FetchError: www.epey.com: ağ hatası: Failed to perform, curl: (#) Operation timed out after # milliseconds with # bytes received. See https://curl.se/libcurl/c/libcurl-errors.html first for more detai"
     },
     "pazarama": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok"
+      "son_durum": "hata",
+      "son_hata": "FetchError: www.pazarama.com: ağ hatası: Failed to perform, curl: (#) Could not resolve host: www.pazarama.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
     },
     "pttavm": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok"
+      "son_durum": "hata",
+      "son_hata": "FetchError: www.pttavm.com: ağ hatası: Failed to perform, curl: (#) Could not resolve host: www.pttavm.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
     },
     "trendyol": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok"
+      "son_durum": "hata",
+      "son_hata": "FetchError: www.trendyol.com: ağ hatası: Failed to perform, curl: (#) Could not resolve host: www.trendyol.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
     }
   },
   "telegram_offset": null
