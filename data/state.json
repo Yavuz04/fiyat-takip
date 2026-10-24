@@ -11,10 +11,11 @@
   },
   "saglik": {
     "amazon": {
-      "ardisik_hata": 0,
+      "ardisik_hata": 1,
       "uyarildi": false,
-      "son_durum": "ok",
-      "duzeldi": "2026-10-24T04:08:41+03:00"
+      "son_durum": "hata",
+      "duzeldi": "2026-10-24T04:08:41+03:00",
+      "son_hata": "FetchError: www.amazon.com.tr: HTTP #"
     },
     "hepsiburada": {
       "ardisik_hata": 0,
@@ -27,5 +28,5 @@
       "son_durum": "ok"
     }
   },
-  "telegram_offset": 982833544
+  "telegram_offset": 982833545
 }
