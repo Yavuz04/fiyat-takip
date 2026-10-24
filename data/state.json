@@ -11,11 +11,10 @@
   },
   "saglik": {
     "amazon": {
-      "ardisik_hata": 1,
+      "ardisik_hata": 0,
       "uyarildi": false,
-      "son_durum": "hata",
-      "duzeldi": "2026-10-24T04:08:41+03:00",
-      "son_hata": "FetchError: www.amazon.com.tr: HTTP #"
+      "son_durum": "ok",
+      "duzeldi": "2026-10-24T04:08:41+03:00"
     },
     "hepsiburada": {
       "ardisik_hata": 0,
